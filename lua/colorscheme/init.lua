@@ -9,8 +9,6 @@ M.setup = function()
 		vim.cmd("syntax reset")
 	end
 
-	vim.keymap.set("n", "<leader><leader>h", "<cmd>colorscheme colorscheme<cr>", { desc = "set colorscheme" })
-
 	vim.o.termguicolors = true
 	vim.g.colors_name = "colorscheme"
 

@@ -1,403 +1,189 @@
-local palette = require("colorscheme.palette")
+local C = require("colorscheme.palette")
 
 local highlights = {
-	["@attribute.diff"] = { fg = palette.green },
-	["@boolean"] = { link = "Boolean" },
-	["@class"] = { fg = palette.blue },
-	["@conditional"] = { link = "Conditional" },
-	["@field"] = { fg = palette.blue },
-	["@include"] = { link = "Include" },
-	["@interface"] = { fg = palette.blue },
-	["@macro"] = { link = "Macro" },
-	["@method"] = { fg = palette.rose },
-	["@namespace"] = { link = "Include" },
-	["@number"] = { link = "Number" },
-	["@parameter"] = { fg = palette.orange },
-	["@preproc"] = { link = "PreProc" },
-	["@punctuation"] = { fg = palette.lightgray },
-	["@regexp"] = { link = "String" },
-	["@repeat"] = { link = "Repeat" },
-	["@storageclass"] = { link = "StorageClass" },
-	["@symbol"] = { link = "Identifier" },
-	["@text"] = { fg = palette.foreground },
-	["@text.danger"] = { fg = palette.red },
-	["@text.diff.add"] = { fg = palette.blue, bg = palette.blue, blend = 20 },
-	["@text.diff.delete"] = { fg = palette.red, bg = palette.red, blend = 20 },
-	["@text.emphasis"] = { italic = true },
-	["@text.environment"] = { link = "Macro" },
-	["@text.environment.name"] = { link = "Type" },
-	["@text.math"] = { link = "Special" },
-	["@text.note"] = { link = "SpecialComment" },
-	["@text.strike"] = { strikethrough = true },
-	["@text.strong"] = { bold = true },
-	["@text.title"] = { link = "Title" },
-	["@text.title.1.markdown"] = { link = "markdownH1" },
-	["@text.title.1.marker.markdown"] = { link = "markdownH1Delimiter" },
-	["@text.title.2.markdown"] = { link = "markdownH2" },
-	["@text.title.2.marker.markdown"] = { link = "markdownH2Delimiter" },
-	["@text.title.3.markdown"] = { link = "markdownH3" },
-	["@text.title.3.marker.markdown"] = { link = "markdownH3Delimiter" },
-	["@text.title.4.markdown"] = { link = "markdownH4" },
-	["@text.title.4.marker.markdown"] = { link = "markdownH4Delimiter" },
-	["@text.title.5.markdown"] = { link = "markdownH5" },
-	["@text.title.5.marker.markdown"] = { link = "markdownH5Delimiter" },
-	["@text.title.6.markdown"] = { link = "markdownH6" },
-	["@text.title.6.marker.markdown"] = { link = "markdownH6Delimiter" },
-	["@text.underline"] = { underline = true },
-	["@text.uri"] = { fg = palette.orange },
-	["@text.warning"] = { fg = palette.yellow },
-	["@todo"] = { link = "Todo" },
+	ColorColumn = { bg = C.surface }, -- used for the columns set with 'colorcolumn'
+	Conceal = { fg = C.bg, bg = C.fg }, -- placeholder characters substituted for concealed text (see 'conceallevel')
+	Cursor = { fg = C.bg, bg = C.fg }, -- character under the cursor
+	lCursor = { fg = C.bg, bg = C.fg }, -- the character under the cursor when |language-mapping| is used (see 'guicursor')
+	CursorIM = { bg = C.highlight }, -- like Cursor, but used when in IME mode |CursorIM|
+	CursorColumn = { bg = C.surface }, -- Screen-column at the cursor, when 'cursorcolumn' is set.
+	CursorLine = {
+		bg = C.highlight,
+	}, -- Screen-line at the cursor, when 'cursorline' is set.  Low-priority if forecrust (ctermfg OR guifg) is not set.
+	Directory = { fg = C.green }, -- directory names (and other special names in listings)
+	EndOfBuffer = { fg = C.surface }, -- filler lines (~) after the end of the buffer.  By default, this is highlighted like |hl-NonText|.
+	ErrorMsg = { fg = C.error, bold = true, italic = true }, -- error messages on the command line
+	VertSplit = { fg = C.nc }, -- the column separating vertically split windows
+	Folded = { fg = C.blue, bg = C.light_gray }, -- line used for closed folds
+	FoldColumn = { fg = C.overlay0 }, -- 'foldcolumn'
+	SignColumn = { bg = C.crust, fg = C.surface1 }, -- column where |signs| are displayed
+	SignColumnSB = { bg = C.nc, fg = C.gray }, -- column where |signs| are displayed
+	Substitute = { bg = C.warn, fg = C.bg }, -- |:substitute| replacement text highlighting
+	LineNr = { fg = C.gray }, -- Line number for ":number" and ":#" commands, and when 'number' or 'relativenumber' option is set.
+	CursorLineNr = { fg = C.yellow }, -- Like LineNr when 'cursorline' or 'relativenumber' is set for the cursor line. highlights the number in numberline.
+	MatchParen = { bold = true, blend = 25, underline = true, fg = C.blue }, -- The character under the cursor or just before it, if it is a paired bracket, and its match. |pi_paren.txt|
+	ModeMsg = { fg = C.light_gray }, -- 'showmode' message (e.g., "-- INSERT -- ")
+	-- MsgArea = { fg = palette.text }, -- Area for messages and cmdline, don't set this highlight because of https://github.com/neovim/neovim/issues/17832
+	MsgSeparator = {}, -- Separator for scrolled messages, `msgsep` flag of 'display'
+	MoreMsg = { fg = C.green }, -- |more-prompt|
+	NonText = { link = "NonText" }, -- '@' at the end of the window, characters from 'showbreak' and other characters that do not really exist in the text (e.g., ">" displayed when a double-wide character doesn't fit at the end of the line). See also |hl-EndOfBuffer|.
+	Normal = { fg = C.text, bg = "NONE" }, -- normal text
+	NormalNC = {
+		fg = C.light_gray,
+		bg = C.nc,
+	}, -- normal text in non-current windows
+	NormalSB = { fg = C.light_gray, bg = C.nc }, -- normal text in non-current windows
+	NormalFloat = {
+		fg = C.fg,
+		bg = C.surface,
+	}, -- Normal text in floating windows.
+	FloatBorder = { fg = C.blue },
+	FloatTitle = { fg = C.cayn, bg = "NONE", bold = true }, -- Title of floating windows
+	Pmenu = {
+		bg = C.surface,
+		fg = C.fg,
+	}, -- Popup menu: normal item.
+	PmenuSel = { bg = C.yellow, fg = C.surface }, -- Popup menu: selected item.
+	PmenuSbar = { bg = C.nc }, -- Popup menu: scrollbar.
+	PmenuThumb = { bg = C.surface }, -- Popup menu: Thumb of the scrollbar.
+	Question = { fg = C.rose }, -- |hit-enter| prompt and yes/no questions
+	QuickFixLine = { bg = C.surface, bold = true }, -- Current |quickfix| item in the quickfix window. Combined with |hl-CursorLine| when the cursor is there.
+	Search = {}, -- Last search pattern highlighting (see 'hlsearch').  Also used for similar items that need to stand out.
+	IncSearch = { bg = C.yellow, fg = C.bg }, -- 'incsearch' highlighting; also used for the text replaced with ":s///c"
+	CurSearch = { link = "IncSearch" }, -- 'cursearch' highlighting: highlights the current search you're on differently
+	SpecialKey = { link = "NonText" }, -- Unprintable characters: text displayed differently from what it really is.  But not 'listchars' textspace. |hl-Whitespace|
+	SpellBad = { sp = C.red, underline = true }, -- Word that is not recognized by the spellchecker. |spell| Combined with the highlighting used otherwise.
+	SpellCap = { sp = C.yellow, underline = true }, -- Word that should start with a capital. |spell| Combined with the highlighting used otherwise.
+	SpellLocal = { sp = C.info, underline = true }, -- Word that is recognized by the spellchecker as one that is used in another region. |spell| Combined with the highlighting used otherwise.
+	SpellRare = { sp = C.light_gray, underline = true }, -- Word that is recognized by the spellchecker as one that is hardly ever used.  |spell| Combined with the highlighting used otherwise.
+	StatusLine = { bg = C.surface, fg = C.blue }, -- status line of current window
+	StatusLineNC = { bg = C.nc, fg = C.gray }, -- status lines of not-current windows Note: if this is equal to "StatusLine" Vim will use "^^^" in the status line of the current window.
+	TabLine = { bg = C.nc, fg = C.light_gray }, -- tab pages line, not active tab page label
+	TabLineFill = { bg = C.nc }, -- tab pages line, where there are no labels
+	TabLineSel = { bg = C.cayn, fg = C.nc }, -- tab pages line, active tab page label
+	TermCursor = { fg = C.bg, bg = C.blue }, -- cursor in a focused terminal
+	TermCursorNC = { fg = C.bg, bg = C.overlay2 }, -- cursor in unfocused terminals
+	Title = { bold = true, fg = C.green }, -- titles for output from ":set all", ":autocmd" etc.
+	Visual = { bg = C.highlight }, -- Visual mode selection
+	VisualNOS = { bg = C.surface1, bold = true }, -- Visual mode selection when vim is "Not Owning the Selection".
+	WarningMsg = { fg = C.yellow, bold = true }, -- warning messages
+	Whitespace = { fg = C.surface }, -- "nbsp", "space", "tab" and "trail" in 'listchars'
+	WildMenu = { bg = C.surface }, -- current match in 'wildmenu' completion
+	WinBar = { bold = true, fg = C.nc },
+	WinBarNC = { bold = true, fg = C.nc },
+	WinSeparator = { bold = true, fg = C.nc },
 
-	ColorColumn = { bg = palette.surface },
-	Conceal = { bg = "NONE" },
-	CurSearch = { fg = palette.background, bg = palette.yellow },
-	Cursor = { fg = palette.foreground, bg = palette.highlight },
-	CursorColumn = { bg = palette.surface },
-	CursorLine = { bg = palette.surface },
-	CursorLineNr = { fg = palette.yellow, bold = true },
-	DiffAdd = { bg = palette.blue, blend = 20 },
-	DiffChange = { bg = palette.rose, blend = 20 },
-	DiffDelete = { bg = palette.red, blend = 20 },
-	DiffText = { bg = palette.rose, blend = 40 },
-	diffAdded = { link = "DiffAdd" },
-	diffChanged = { link = "DiffChange" },
-	diffRemoved = { link = "DiffDelete" },
-	Directory = { fg = palette.rose, bold = true },
-	ErrorMsg = { fg = palette.red, bold = true },
-	FoldColumn = { fg = palette.gray },
-	IncSearch = { link = "CurSearch" },
-	LineNr = { fg = palette.gray },
-	MatchParen = { fg = palette.blue, bg = palette.background, blend = 25, underline = true },
-	ModeMsg = { fg = palette.lightgray },
-	MoreMsg = { fg = palette.orange },
-	NonText = { fg = palette.nc },
-	NvimInternalError = { link = "ErrorMsg" },
-	PmenuExtra = { fg = palette.gray, bg = palette.surface },
-	PmenuExtraSel = { fg = palette.lightgray, bg = palette.surface },
-	PmenuKindSel = { fg = palette.lightgray, bg = palette.surface },
-	PmenuSbar = { bg = palette.surface },
-	PmenuSel = { fg = palette.foreground, bg = palette.surface },
-	PmenuThumb = { bg = palette.nc },
-	Question = { fg = palette.yellow },
-	RedrawDebugClear = { fg = palette.background, bg = palette.yellow },
-	RedrawDebugComposed = { fg = palette.background, bg = palette.blue },
-	RedrawDebugRecompose = { fg = palette.background, bg = palette.red },
-	Search = { fg = palette.background, bg = palette.rose },
-	SpecialKey = { fg = palette.cayn },
-	SpellBad = { sp = palette.lightgray, undercurl = true },
-	SpellCap = { sp = palette.lightgray, undercurl = true },
-	SpellLocal = { sp = palette.lightgray, undercurl = true },
-	SpellRare = { sp = palette.lightgray, undercurl = true },
-	StatusLineTerm = { fg = palette.background, bg = palette.blue },
-	StatusLineTermNC = { fg = palette.background, bg = palette.blue, blend = 60 },
-	Substitute = { link = "IncSearch" },
-	Title = { fg = palette.cayn, bold = true },
-	VertSplit = { fg = palette.lightgray },
-	Visual = { bg = palette.highlight },
-	-- VisualNOS = {},
-	WarningMsg = { fg = palette.yellow, bold = true },
-	-- Whitespace = {},
-	WildMenu = { link = "IncSearch" },
-	WinBar = { fg = palette.lightgray, bg = palette.blue },
-	WinBarNC = { fg = palette.nc, bg = palette.blue, blend = 60 },
-	WinSeparator = { fg = palette.lightgray },
+	Comment = { fg = C.dark_green, italic = true }, -- just comments
+	SpecialComment = { link = "Special" }, -- special things inside a comment
+	Constant = { fg = C.yellow }, -- (preferred) any constant
+	String = { fg = C.aqua }, -- a string constant: "this is a string"
+	Character = { fg = C.aqua }, --  a character constant: 'c', '\n'
+	Number = { fg = C.yellow }, --   a number constant: 234, 0xff
+	Float = { link = "Number" }, --    a floating point constant: 2.3e10
+	Boolean = { fg = C.yellow }, --  a boolean constant: TRUE, false
+	Identifier = { fg = C.fg }, -- (preferred) any variable name
+	Function = { fg = C.rose }, -- function name (also: methods for classes)
+	Statement = { fg = C.blue }, -- (preferred) any statement
+	Conditional = { fg = C.blue }, --  if, then, else, endif, switch, etc.
+	Repeat = { fg = C.blue }, --   for, do, while, etc.
+	Label = { fg = C.blue }, --    case, default, etc.
+	Operator = { fg = C.light_gray }, -- "sizeof", "+", "*", etc.
+	Keyword = { fg = C.blue, italic = true }, --  any other keyword
+	Exception = { fg = C.blue }, --  try, catch, throw
 
-	DiagnosticError = { fg = palette.red },
-	DiagnosticHint = { fg = palette.orange },
-	DiagnosticInfo = { fg = palette.cayn },
-	DiagnosticOk = { fg = palette.blue },
-	DiagnosticWarn = { fg = palette.yellow },
-	DiagnosticDefaultError = { link = "DiagnosticError" },
-	DiagnosticDefaultHint = { link = "DiagnosticHint" },
-	DiagnosticDefaultInfo = { link = "DiagnosticInfo" },
-	DiagnosticDefaultOk = { link = "DiagnosticOk" },
-	DiagnosticDefaultWarn = { link = "DiagnosticWarn" },
-	DiagnosticFloatingError = { link = "DiagnosticError" },
-	DiagnosticFloatingHint = { link = "DiagnosticHint" },
-	DiagnosticFloatingInfo = { link = "DiagnosticInfo" },
-	DiagnosticFloatingOk = { link = "DiagnosticOk" },
-	DiagnosticFloatingWarn = { link = "DiagnosticWarn" },
-	DiagnosticSignError = { link = "DiagnosticError" },
-	DiagnosticSignHint = { link = "DiagnosticHint" },
-	DiagnosticSignInfo = { link = "DiagnosticInfo" },
-	DiagnosticSignOk = { link = "DiagnosticOk" },
-	DiagnosticSignWarn = { link = "DiagnosticWarn" },
-	DiagnosticUnderlineError = { sp = palette.red, undercurl = true },
-	DiagnosticUnderlineHint = { sp = palette.orange, undercurl = true },
-	DiagnosticUnderlineInfo = { sp = palette.cayn, undercurl = true },
-	DiagnosticUnderlineOk = { sp = palette.blue, undercurl = true },
-	DiagnosticUnderlineWarn = { sp = palette.yellow, undercurl = true },
-	DiagnosticVirtualTextError = { fg = palette.red, bg = palette.red, blend = 10 },
-	DiagnosticVirtualTextHint = { fg = palette.orange, bg = palette.orange, blend = 10 },
-	DiagnosticVirtualTextInfo = { fg = palette.cayn, bg = palette.cayn, blend = 10 },
-	DiagnosticVirtualTextOk = { fg = palette.blue, bg = palette.blue, blend = 10 },
-	DiagnosticVirtualTextWarn = { fg = palette.yellow, bg = palette.yellow, blend = 10 },
+	PreProc = { fg = C.blue }, -- (preferred) generic Preprocessor
+	Include = { fg = C.blue }, --  preprocessor #include
+	Define = { fg = C.blue }, -- preprocessor #define
+	Macro = { fg = C.blue }, -- same as Define
+	PreCondit = { link = "PreProc" }, -- preprocessor #if, #else, #endif, etc.
 
-	Boolean = { fg = palette.yellow },
-	Character = { fg = palette.yellow },
-	Comment = { fg = palette.gray },
-	Conditional = { fg = palette.blue },
-	Constant = { fg = palette.yellow },
-	Debug = { fg = palette.rose },
-	Define = { fg = palette.orange },
-	Delimiter = { fg = palette.lightgray },
-	Error = { fg = palette.red },
-	Exception = { fg = palette.blue },
-	Float = { fg = palette.yellow },
-	Function = { fg = palette.rose },
-	Identifier = { fg = palette.foreground },
-	Include = { fg = palette.blue },
-	Keyword = { fg = palette.blue },
-	Label = { fg = palette.cayn },
-	LspCodeLens = { fg = palette.lightgray },
-	LspCodeLensSeparator = { fg = palette.nc },
-	LspInlayHint = { fg = palette.nc, bg = palette.muted, blend = 10 },
-	LspReferenceRead = { bg = palette.highlight },
-	LspReferenceText = { bg = palette.highlight },
-	LspReferenceWrite = { bg = palette.highlight },
-	Macro = { fg = palette.orange },
-	Number = { fg = palette.yellow },
-	Operator = { fg = palette.lightgray },
-	PreCondit = { fg = palette.orange },
-	PreProc = { link = "PreCondit" },
-	Repeat = { fg = palette.blue },
-	Special = { fg = palette.cayn },
-	SpecialChar = { link = "Special" },
-	SpecialComment = { fg = palette.orange },
-	Statement = { fg = palette.blue, bold = true },
-	StorageClass = { fg = palette.cayn },
-	String = { fg = palette.green },
-	Structure = { fg = palette.cayn },
-	Tag = { fg = palette.yellow },
-	Todo = { fg = palette.rose, bg = palette.rose, blend = 20 },
-	Type = { fg = palette.cayn },
-	TypeDef = { link = "Type" },
-	Underlined = { fg = palette.orange, underline = true },
+	StorageClass = { fg = C.cayn }, -- static, register, volatile, etc.
+	Structure = { fg = C.cayn }, --  struct, union, enum, etc.
+	Special = { fg = C.yellow }, -- (preferred) any special symbol
+	Type = { fg = C.fg }, -- (preferred) int, long, char, etc.
+	Typedef = { link = "Type" }, --  A typedef
+	SpecialChar = { link = "Special" }, -- special character in a constant
 
-	healthError = { fg = palette.red },
-	healthSuccess = { fg = palette.cayn },
-	healthWarning = { fg = palette.yellow },
-
-	htmlArg = { fg = palette.blue },
-	htmlBold = { bold = true },
-	htmlEndTag = { fg = palette.lightgray },
-	htmlH1 = { link = "markdownH1" },
-	htmlH2 = { link = "markdownH2" },
-	htmlH3 = { link = "markdownH3" },
-	htmlH4 = { link = "markdownH4" },
-	htmlH5 = { link = "markdownH5" },
-	htmlItalic = { italic = true },
-	htmlLink = { link = "markdownUrl" },
-	htmlTag = { fg = palette.lightgray },
-	htmlTagN = { fg = palette.foreground },
-	htmlTagName = { fg = palette.yellow },
-
-	markdownDelimiter = { fg = palette.lightgray },
-	markdownH1 = { fg = palette.orange, bold = true },
-	markdownH1Delimiter = { link = "markdownH1" },
-	markdownH2 = { fg = palette.cayn, bold = true },
-	markdownH2Delimiter = { link = "markdownH2" },
-
-	markdownH3 = { fg = palette.rose, bold = true },
-	markdownH3Delimiter = { link = "markdownH3" },
-	markdownH4 = { fg = palette.yellow, bold = true },
-	markdownH4Delimiter = { link = "markdownH4" },
-	markdownH5 = { fg = palette.blue, bold = true },
-	markdownH5Delimiter = { link = "markdownH5" },
-	markdownH6 = { fg = palette.green, bold = true },
-	markdownH6Delimiter = { link = "markdownH6" },
-	markdownLinkText = { link = "markdownUrl" },
-	markdownUrl = { fg = palette.orange, sp = palette.orange, underline = true },
-
-	mkdCode = { fg = palette.cayn },
-	mkdCodeDelimiter = { fg = palette.rose },
-	mkdCodeEnd = { fg = palette.cayn },
-	mkdCodeStart = { fg = palette.cayn },
-	mkdFootnotes = { fg = palette.cayn },
-	mkdID = { fg = palette.cayn, underline = true },
-	mkdInlineURL = { link = "markdownUrl" },
-	mkdLink = { link = "markdownUrl" },
-	mkdLinkDef = { link = "markdownUrl" },
-	mkdListItemLine = { fg = palette.foreground },
-	mkdRule = { fg = palette.lightgray },
-	mkdURL = { link = "markdownUrl" },
-
-	--- Identifiers
-	["@variable"] = { fg = palette.foreground },
-	["@variable.builtin"] = { fg = palette.yellow, bold = true },
-	["@variable.parameter"] = { fg = palette.foreground },
-	["@variable.member"] = { fg = palette.cayn },
-
-	["@constant"] = { fg = palette.yellow },
-	["@constant.builtin"] = { fg = palette.yellow, bold = true },
-	["@constant.macro"] = { fg = palette.yellow },
-
-	["@module"] = { fg = palette.foreground },
-	["@module.builtin"] = { fg = palette.foreground, bold = true },
-	["@label"] = { link = "Label" },
-
-	--- Literals
-	["@string"] = { link = "String" },
-	-- ["@string.documentation"] = {},
-	["@string.regexp"] = { fg = palette.orange },
-	["@string.escape"] = { fg = palette.blue },
-	["@string.special"] = { link = "String" },
-	["@string.special.symbol"] = { link = "Identifier" },
-	["@string.special.url"] = { fg = palette.orange },
-	-- ["@string.special.path"] = {},
-
-	["@character"] = { link = "Character" },
-	["@character.special"] = { link = "Character" },
-
-	["@number.float"] = { link = "Number" },
-	["@float"] = { link = "Number" },
-
-	--- Types
-	["@type"] = { fg = palette.cayn },
-	["@type.builtin"] = { fg = palette.cayn, bold = true },
-	-- ["@type.definition"] = {},
-	-- ["@type.qualifier"] = {},
-
-	-- ["@attribute"] = {},
-	["@property"] = { fg = palette.cayn },
-
-	--- Functions
-	["@function"] = { fg = palette.rose },
-	["@function.builtin"] = { fg = palette.rose, bold = true },
-	-- ["@function.call"] = {},
-	["@function.macro"] = { link = "Function" },
-	["@function.method"] = { fg = palette.rose },
-	["@function.method.call"] = { fg = palette.cayn },
-
-	["@constructor"] = { fg = palette.rose },
-	["@operator"] = { link = "Operator" },
-
-	--- Keywords
-	["@keyword"] = { link = "Keyword" },
-	-- ["@keyword.coroutine"] = {},
-	-- ["@keyword.function"] = {},
-	["@keyword.operator"] = { fg = palette.lightgray },
-	["@keyword.import"] = { fg = palette.blue },
-	["@keyword.storage"] = { fg = palette.cayn },
-	["@keyword.repeat"] = { fg = palette.blue },
-	["@keyword.return"] = { fg = palette.blue },
-	["@keyword.debug"] = { fg = palette.rose },
-	["@keyword.exception"] = { fg = palette.blue },
-	["@keyword.conditional"] = { fg = palette.blue },
-	["@keyword.conditional.ternary"] = { fg = palette.blue },
-	["@keyword.directive"] = { fg = palette.orange },
-	["@keyword.directive.define"] = { fg = palette.orange },
-
-	--- Punctuation
-	["@punctuation.delimiter"] = { fg = palette.lightgray },
-	["@punctuation.bracket"] = { fg = palette.lightgray },
-	["@punctuation.special"] = { fg = palette.lightgray },
-
-	--- Comments
-	["@comment"] = { link = "Comment" },
-	-- ["@comment.documentation"] = {},
-
-	["@comment.error"] = { fg = palette.red },
-	["@comment.warning"] = { fg = palette.yellow },
-	["@comment.todo"] = { fg = palette.rose, bg = palette.rose, blend = 20 },
-	["@comment.hint"] = { fg = palette.orange, bg = palette.orange, blend = 20 },
-	["@comment.info"] = { fg = palette.cayn, bg = palette.cayn, blend = 20 },
-	["@comment.note"] = { fg = palette.cayn, bg = palette.cayn, blend = 20 },
-
-	--- Markup
-	["@markup.strong"] = { bold = true },
-	["@markup.italic"] = { italic = true },
-	["@markup.strikethrough"] = { strikethrough = true },
-	["@markup.underline"] = { underline = true },
-
-	["@markup.heading"] = { fg = palette.cayn, bold = true },
-
-	["@markup.quote"] = { fg = palette.foreground },
-	["@markup.math"] = { link = "Special" },
-	["@markup.environment"] = { link = "Macro" },
-	["@markup.environment.name"] = { link = "@type" },
-
-	-- ["@markup.link"] = {},
-	["@markup.link.markdown_inline"] = { fg = palette.lightgray },
-	["@markup.link.label.markdown_inline"] = { fg = palette.cayn },
-	["@markup.link.url"] = { fg = palette.green },
-
-	-- ["@markup.raw"] = { bg = palette.surface },
-	-- ["@markup.raw.block"] = { bg = palette.surface },
-	["@markup.raw.delimiter.markdown"] = { fg = palette.lightgray },
-
-	["@markup.list"] = { fg = palette.blue },
-	["@markup.list.checked"] = { fg = palette.cayn, bg = palette.cayn, blend = 10 },
-	["@markup.list.unchecked"] = { fg = palette.foreground },
-
-	-- Markdown headings
-	["@markup.heading.1.markdown"] = { link = "markdownH1" },
-	["@markup.heading.2.markdown"] = { link = "markdownH2" },
-	["@markup.heading.3.markdown"] = { link = "markdownH3" },
-	["@markup.heading.4.markdown"] = { link = "markdownH4" },
-	["@markup.heading.5.markdown"] = { link = "markdownH5" },
-	["@markup.heading.6.markdown"] = { link = "markdownH6" },
-	["@markup.heading.1.marker.markdown"] = { link = "markdownH1Delimiter" },
-	["@markup.heading.2.marker.markdown"] = { link = "markdownH2Delimiter" },
-	["@markup.heading.3.marker.markdown"] = { link = "markdownH3Delimiter" },
-	["@markup.heading.4.marker.markdown"] = { link = "markdownH4Delimiter" },
-	["@markup.heading.5.marker.markdown"] = { link = "markdownH5Delimiter" },
-	["@markup.heading.6.marker.markdown"] = { link = "markdownH6Delimiter" },
-
-	["@diff.plus"] = { fg = palette.blue, bg = palette.blue, blend = 20 },
-	["@diff.minus"] = { fg = palette.red, bg = palette.red, blend = 20 },
-	["@diff.delta"] = { bg = palette.rose, blend = 20 },
-
+	-- Tags
+	Tag = { fg = C.yellow }, -- you can use CTRL-] on this
 	["@tag"] = { link = "Tag" },
-	["@tag.attribute"] = { fg = palette.orange },
-	["@tag.delimiter"] = { fg = palette.lightgray },
+	["@tag.attribute"] = { fg = C.cayn },
+	["@tag.delimiter"] = { fg = C.light_gray },
 
-	--- Non-highlighting captures
-	-- ["@none"] = {},
-	["@conceal"] = { link = "Conceal" },
-	["@conceal.markdown"] = { fg = palette.lightgray },
+	Delimiter = { fg = C.light_gray }, -- character that needs attention
+	Debug = { link = "Special" }, -- debugging statements
 
-	-- ["@spell"] = {},
-	-- ["@nospell"] = {},
+	Underlined = { underline = true }, -- (preferred) text that stands out, HTML links
+	Bold = { bold = true },
+	Italic = { italic = true },
+	-- ("Ignore", below, may be invisible...)
+	-- Ignore = { }, -- (preferred) left blank, hidden  |hl-Ignore|
 
-	--- Semantic
-	["@lsp.type.comment"] = {},
-	["@lsp.type.comment.c"] = { link = "@comment" },
-	["@lsp.type.comment.cpp"] = { link = "@comment" },
-	["@lsp.type.enum"] = { link = "@type" },
-	["@lsp.type.interface"] = { link = "@interface" },
-	["@lsp.type.keyword"] = { link = "@keyword" },
-	["@lsp.type.namespace"] = { link = "@namespace" },
-	["@lsp.type.namespace.python"] = { link = "@variable" },
-	["@lsp.type.parameter"] = { link = "@parameter" },
-	["@lsp.type.property"] = { link = "@property" },
-	["@lsp.type.variable"] = {}, -- defer to treesitter for regular variables
-	["@lsp.type.variable.svelte"] = { link = "@variable" },
-	["@lsp.typemod.function.defaultLibrary"] = { link = "@function.builtin" },
-	["@lsp.typemod.operator.injected"] = { link = "@operator" },
-	["@lsp.typemod.string.injected"] = { link = "@string" },
-	["@lsp.typemod.variable.constant"] = { link = "@constant" },
-	["@lsp.typemod.variable.defaultLibrary"] = { link = "@variable.builtin" },
-	["@lsp.typemod.variable.injected"] = { link = "@variable" },
+	Error = { fg = C.error }, -- (preferred) any erroneous construct
+	Todo = { bg = C.yellow, fg = C.nc }, -- (preferred) anything that needs extra attention; mostly the keywords TODO FIXME and XXX
+	qfLineNr = { fg = C.yellow },
+	qfFileName = { fg = C.blue },
+	htmlH1 = { fg = C.green, bold = true },
+	htmlH2 = { fg = C.blue, bold = true },
+	-- mkdHeading = { fg = C.peach, bold = true },
+	-- mkdCode = { bg = C.terminal_black, fg = C.text },
+	mkdCodeDelimiter = { fg = C.rose },
+	mkdCodeStart = { fg = C.cayn },
+	mkdCodeEnd = { fg = C.cayn },
+	-- mkdLink = { fg = C.blue, underline = true },
 
-	FloatBorder = { fg = palette.nc, bg = "NONE" },
-	FloatTitle = { fg = palette.cayn, bg = "NONE", bold = true },
-	Folded = { fg = palette.foreground, bg = "NONE" },
-	NormalFloat = { bg = "NONE" },
-	Normal = { fg = palette.foreground, bg = "NONE" },
-	NormalNC = { fg = palette.foreground, bg = palette.nc },
-	Pmenu = { fg = palette.lightgray, bg = "NONE" },
-	PmenuKind = { fg = palette.cayn, bg = "NONE" },
-	SignColumn = { fg = palette.foreground, bg = "NONE" },
-	StatusLine = { fg = palette.lightgray, bg = "NONE" },
-	StatusLineNC = { fg = palette.nc, bg = "NONE" },
-	TabLine = { bg = "NONE", fg = palette.lightgray },
-	TabLineFill = { bg = "NONE" },
-	TabLineSel = { fg = palette.foreground, bg = "NONE", bold = true },
+	-- debugging
+	debugPC = { bg = C.rose }, -- used for highlighting the current line in terminal-debug
+	debugBreakpoint = { bg = C.bg, fg = C.light_gray }, -- used for breakpoint colors in terminal-debug
+	-- illuminate
+	illuminatedWord = { bg = C.surface },
+	illuminatedCurWord = { bg = C.highlight },
+	-- diff
+	diffAdded = { fg = C.diff_green },
+	diffRemoved = { fg = C.diff_red },
+	diffChanged = { fg = C.diff_blue },
+	diffOldFile = { fg = C.diff_blue },
+	diffNewFile = { fg = C.diff_green },
+	diffFile = { fg = C.diff_green },
+	diffLine = { fg = C.gray },
+	diffIndexLine = { fg = C.diff_blue },
+	DiffAdd = { bg = C.diff_green }, -- diff mode: Added line |diff.txt|
+	DiffChange = { bg = C.diff_blue }, -- diff mode: Changed line |diff.txt|
+	DiffDelete = { bg = C.diff_red }, -- diff mode: Deleted line |diff.txt|
+	DiffText = { bg = C.gray }, -- diff mode: Changed text within a changed line |diff.txt|
+	-- NeoVim
+	healthError = { fg = C.error },
+	healthSuccess = { fg = C.green },
+	healthWarning = { fg = C.warn },
+	-- misc
 
-	-- ["@markup.raw"] = { bg = "none" },
-	["@markup.raw.markdown_inline"] = { fg = palette.yellow },
-	-- ["@markup.raw.block"] = { bg = "none" },
+	-- glyphs
+	GlyphPalette1 = { fg = C.red },
+	GlyphPalette2 = { fg = C.green },
+	GlyphPalette3 = { fg = C.yellow },
+	GlyphPalette4 = { fg = C.blue },
+	GlyphPalette6 = { fg = C.green },
+	GlyphPalette7 = { fg = C.fg },
+	GlyphPalette9 = { fg = C.red },
+
+	-- rainbow
+	rainbow1 = { fg = C.red },
+	rainbow2 = { fg = C.green },
+	rainbow3 = { fg = C.yellow },
+	rainbow4 = { fg = C.blue },
+	rainbow5 = { fg = C.purple },
+	rainbow6 = { fg = C.rose },
+
+	-- csv
+	csvCol0 = { fg = C.red },
+	csvCol1 = { fg = C.green },
+	csvCol2 = { fg = C.yellow },
+	csvCol3 = { fg = C.blue },
+	csvCol4 = { fg = C.purple },
+	csvCol5 = { fg = C.rose },
+	csvCol6 = { fg = C.dark_green },
+	csvCol7 = { fg = C.info },
+	csvCol8 = { fg = C.warn },
 }
 
 return highlights
