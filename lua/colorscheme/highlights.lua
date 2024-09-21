@@ -10,7 +10,7 @@ local highlights = {
 	CursorLine = {
 		bg = C.highlight,
 	}, -- Screen-line at the cursor, when 'cursorline' is set.  Low-priority if forecrust (ctermfg OR guifg) is not set.
-	Directory = { fg = C.green }, -- directory names (and other special names in listings)
+	Directory = { fg = C.rose }, -- directory names (and other special names in listings)
 	EndOfBuffer = { fg = C.surface }, -- filler lines (~) after the end of the buffer.  By default, this is highlighted like |hl-NonText|.
 	ErrorMsg = { fg = C.error, bold = true, italic = true }, -- error messages on the command line
 	VertSplit = { fg = C.nc }, -- the column separating vertically split windows
@@ -21,7 +21,7 @@ local highlights = {
 	Substitute = { bg = C.warn, fg = C.bg }, -- |:substitute| replacement text highlighting
 	LineNr = { fg = C.gray }, -- Line number for ":number" and ":#" commands, and when 'number' or 'relativenumber' option is set.
 	CursorLineNr = { fg = C.yellow }, -- Like LineNr when 'cursorline' or 'relativenumber' is set for the cursor line. highlights the number in numberline.
-	MatchParen = { bold = true, blend = 25, underline = true, fg = C.blue }, -- The character under the cursor or just before it, if it is a paired bracket, and its match. |pi_paren.txt|
+	MatchParen = { blend = 25, underline = true, fg = C.blue }, -- The character under the cursor or just before it, if it is a paired bracket, and its match. |pi_paren.txt|
 	ModeMsg = { fg = C.light_gray }, -- 'showmode' message (e.g., "-- INSERT -- ")
 	-- MsgArea = { fg = palette.text }, -- Area for messages and cmdline, don't set this highlight because of https://github.com/neovim/neovim/issues/17832
 	MsgSeparator = {}, -- Separator for scrolled messages, `msgsep` flag of 'display'
